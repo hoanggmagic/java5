@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Sản Phẩm</title>
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+  </head>
+  <body>
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-4">
+      <h2 class="text-center">Quản Lý Sản Phẩm</h2>
+
+      <!-- Form thêm/sửa sản phẩm -->
+      <div class="card p-3 mb-4">
+        <h5>Thêm/Sửa Sản Phẩm</h5>
+        <form
+          th:action="@{/admin/products/save}"
+          th:object="${product}"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <input type="hidden" th:field="*{id}" />
+          <div class="row">
+            <div class="col-md-6">
+              <label>Tên sản phẩm:</label>
+              <input
+                type="text"
+                class="form-control"
+                th:field="*{name}"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label>Giá:</label>
+              <input
+                type="number"
+                class="form-control"
+                th:field="*{price}"
+                required
+              />
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <label>Danh mục:</label>
+              <select class="form-control" th:field="*{category.id}">
+                <option
+                  th:each="cat : ${categories}"
+                  th:value="${cat.id}"
+                  th:text="${cat.name}"
+                ></option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label>Hình ảnh:</label>
+              <input
+                type="file"
+                class="form-control"
+                name="imageFile"
+                accept="image/*"
+              />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3">Lưu</button>
+        </form>
+      </div>
+
+      <!-- Bảng danh sách sản phẩm -->
+      <table class="table table-bordered text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Hình ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá</th>
+            <th>Danh mục</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td>
+              <img
+                th:if="${product.imageUrl != null}"
+                th:src="@{${product.imageUrl}}"
+                width="50"
+                height="50"
+              />
+            </td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td
+              th:text="${product.category != null ? product.category.name : 'Chưa có'}"
+            ></td>
+            <td>
+              <a
+                th:href="@{/admin/products/edit/{id}(id=${product.id})}"
+                class="btn btn-warning btn-sm"
+                >Sửa</a
+              >
+              <a
+                th:href="@{/admin/products/delete/{id}(id=${product.id})}"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Bạn có chắc chắn muốn xóa?');"
+                >Xóa</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div th:replace="~{layouts/footer.html}"></div>
+    <script
+      th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"
+    ></script>
+    <style>
+      body {
+        background-color: #f8f9fa; /* Màu nền nhẹ */
+        font-family: Arial, sans-serif;
+      }
+
+      h2 {
+        font-weight: bold;
+      }
+
+      .card {
+        border-radius: 10px;
+        background: #ffffff;
+      }
+
+      .product-image {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .table th {
+        background-color: #343a40;
+        color: white;
+      }
+
+      .btn-primary {
+        background-color: #7886c7;
+        border-color: #7886c7;
+      }
+
+      .btn-primary:hover {
+        background-color: #7886c7;
+      }
+
+      .btn-warning {
+        background-color: #7886c7;
+        border-color: #7886c7;
+        color: black;
+      }
+
+      .btn-danger {
+        background-color: #7886c7;
+        border-color: #7886c7;
+      }
+    </style>
+  </body>
+</html>

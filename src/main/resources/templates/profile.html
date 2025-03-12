@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hồ sơ tài khoản</title>
+    <!-- Nhúng Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <!-- Nhúng CSS tùy chỉnh -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      /* Tùy chỉnh cho các phần tử toàn trang */
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+      }
+
+      /* Tùy chỉnh cho các tiêu đề */
+      h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+      }
+
+      /* Bố cục container */
+      .container {
+        max-width: 1200px;
+        margin-top: 30px;
+        padding: 0 15px;
+      }
+
+      /* Các phần tử card sản phẩm */
+      .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      /* Khi người dùng hover vào sản phẩm */
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Hình ảnh sản phẩm */
+      .card-img-top {
+        border-radius: 15px 15px 0 0;
+        object-fit: cover;
+        height: 200px;
+        width: 100%;
+        transition: opacity 0.3s ease;
+      }
+
+      /* Khi người dùng hover vào ảnh */
+      .card-img-top:hover {
+        opacity: 0.85;
+      }
+
+      /* Phần body của card */
+      .card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      /* Tên sản phẩm */
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        text-transform: capitalize;
+      }
+
+      /* Mô tả sản phẩm */
+      .card-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-bottom: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* Giá sản phẩm */
+      .text-danger {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #e74c3c;
+        margin-bottom: 15px;
+      }
+
+      /* Nút thêm vào giỏ */
+      .btn {
+        border-radius: 30px;
+        padding: 12px 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      /* Nút thêm vào giỏ khi hover */
+      .btn:hover {
+        background-color: #007bff;
+        transform: scale(1.05);
+      }
+
+      /* Nút mặc định */
+      .btn-primary {
+        background-color: #3498db;
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background-color: #2980b9;
+      }
+
+      /* Cấu trúc cho các cột sản phẩm */
+      .row {
+        margin: 0 -15px;
+      }
+
+      .col-lg-3,
+      .col-md-4,
+      .col-sm-6 {
+        padding: 15px;
+      }
+
+      /* Tùy chỉnh cho footer */
+      footer {
+        margin-top: 50px;
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 20px 0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nhúng phần header -->
+    <div th:replace="~{layouts/header.html}"></div>
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Thông Tin Tài Khoản</h2>
+
+      <div class="card shadow-lg p-4 mb-5">
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <!-- Hiển thị ảnh đại diện -->
+            <img
+              th:src="@{/uploads/{photo}(photo=${account.photo})}"
+              alt="Ảnh đại diện"
+              class="avatar img-fluid rounded-circle border"
+              style="max-width: 150px; height: auto"
+            />
+          </div>
+          <div class="col-md-8">
+            <!-- Thông tin tài khoản -->
+            <p>
+              <strong>Họ và Tên:</strong>
+              <span th:text="${account.fullname}"></span>
+            </p>
+            <p>
+              <strong>Tên đăng nhập:</strong>
+              <span th:text="${account.username}"></span>
+            </p>
+            <p>
+              <strong>Email:</strong> <span th:text="${account.email}"></span>
+            </p>
+            <p>
+              <strong>Trạng thái:</strong>
+              <span
+                th:text="${account.activated} ? 'Đã kích hoạt' : 'Chưa kích hoạt'"
+              ></span>
+            </p>
+            <p>
+              <strong>Vai trò:</strong>
+              <span th:text="${account.admin} ? 'Admin' : 'Người dùng'"></span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Các nút hành động -->
+        <div class="mt-4 d-flex justify-content-between">
+          <a href="/profile/edit-profile" class="btn btn-primary"
+            >Chỉnh Sửa Hồ Sơ</a
+          >
+        </div>
+      </div>
+    </div>
+    <!-- Nhúng phần footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <!-- Nhúng Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

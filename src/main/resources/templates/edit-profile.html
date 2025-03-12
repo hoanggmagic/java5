@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chỉnh Sửa Hồ Sơ</title>
+    <!-- Nhúng Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <!-- Nhúng CSS tùy chỉnh -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      /* Tùy chỉnh cho các phần tử toàn trang */
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+      }
+
+      /* Tùy chỉnh cho các tiêu đề */
+      h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+      }
+
+      /* Bố cục container */
+      .container {
+        max-width: 800px;
+        margin-top: 30px;
+        padding: 0 15px;
+      }
+
+      /* Phần chỉnh sửa thông tin tài khoản */
+      .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        padding: 20px;
+      }
+
+      /* Nút lưu thay đổi */
+      .btn-save {
+        background-color: #3498db;
+        border: none;
+        padding: 12px 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-save:hover {
+        background-color: #2980b9;
+      }
+
+      .btn-cancel {
+        background-color: #e74c3c;
+        border: none;
+        padding: 12px 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-cancel:hover {
+        background-color: #c0392b;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nhúng phần header -->
+    <div th:replace="~{layouts/header.html}"></div>
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Chỉnh Sửa Hồ Sơ</h2>
+
+      <div class="card shadow-lg">
+        <form
+          action="/save-profile"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <!-- Hình ảnh đại diện -->
+          <div class="mb-3 text-center">
+            <label for="photo" class="form-label">Ảnh Đại Diện</label>
+            <input
+              type="file"
+              class="form-control"
+              id="photo"
+              name="photo"
+              accept="image/*"
+            />
+          </div>
+
+          <!-- Họ và tên -->
+          <div class="mb-3">
+            <label for="fullname" class="form-label">Họ và Tên</label>
+            <input
+              type="text"
+              class="form-control"
+              id="fullname"
+              name="fullname"
+              th:value="${account.fullname}"
+              required
+            />
+          </div>
+
+          <!-- Tên đăng nhập (không thể chỉnh sửa) -->
+          <div class="mb-3">
+            <label for="username" class="form-label">Tên Đăng Nhập</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              th:value="${account.username}"
+              readonly
+            />
+          </div>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              th:value="${account.email}"
+              required
+            />
+          </div>
+
+          <!-- Trạng thái -->
+          <div class="mb-3">
+            <label for="activated" class="form-label">Trạng Thái</label>
+            <select class="form-control" id="activated" name="activated">
+              <option
+                th:value="true"
+                th:text="'Đã kích hoạt'"
+                th:selected="${account.activated}"
+              ></option>
+              <option
+                th:value="false"
+                th:text="'Chưa kích hoạt'"
+                th:selected="${!account.activated}"
+              ></option>
+            </select>
+          </div>
+
+          <!-- Vai trò -->
+          <div class="mb-3">
+            <label for="role" class="form-label">Vai trò</label>
+            <select class="form-control" id="role" name="role">
+              <option
+                th:value="admin"
+                th:text="'Admin'"
+                th:selected="${account.admin}"
+              ></option>
+              <option
+                th:value="user"
+                th:text="'Người dùng'"
+                th:selected="${!account.admin}"
+              ></option>
+            </select>
+          </div>
+
+          <!-- Nút hành động -->
+          <div class="mt-4 d-flex justify-content-between">
+            <button type="submit" class="btn btn-save">Lưu Thay Đổi</button>
+            <a href="/profile" class="btn btn-cancel">Hủy</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Nhúng phần footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <!-- Nhúng Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

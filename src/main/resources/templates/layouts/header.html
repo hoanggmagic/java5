@@ -1,0 +1,110 @@
+<header class="p-3 text-bg-dark">
+  <div class="container">
+    <div
+      class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+    >
+      <a
+        href="/"
+        class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
+      >
+        <svg
+          class="bi me-2"
+          width="40"
+          height="32"
+          role="img"
+          aria-label="Bootstrap"
+        >
+          <use xlink:href="#bootstrap"></use>
+        </svg>
+      </a>
+
+      <ul
+        class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+      >
+        <li><a href="/home" class="nav-link px-2 text-secondary">Home</a></li>
+        <li>
+          <a href="/products" class="nav-link px-2 text-white">Products</a>
+        </li>
+        <li><a href="/contact" class="nav-link px-2 text-white">Contact</a></li>
+        <li><a href="/cart" class="nav-link px-2 text-white">Cart</a></li>
+        <li>
+          <a href="/profile" class="nav-link px-2 text-white">Profile</a>
+        </li>
+        <!-- Chỉ hiển thị nếu user có quyền admin -->
+        <li th:if="${session.user != null and session.user.isAdmin()}">
+          <a href="/admin" class="nav-link px-2 text-white">Admin</a>
+        </li>
+      </ul>
+
+      <div class="text-end">
+        <!-- Nếu chưa đăng nhập -->
+        <div th:if="${session.user == null}">
+          <a href="/auth/login" class="btn btn-outline-light me-2">Login</a>
+          <a href="/auth/register" class="btn btn-warning">Sign-up</a>
+        </div>
+
+        <!-- Nếu đã đăng nhập -->
+        <div th:if="${session.user != null}">
+          <span
+            class="text-white me-2"
+            th:text="${session.user.username}"
+          ></span>
+          <a href="/auth/logout" class="btn btn-danger">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<style>
+  header {
+    background: linear-gradient(
+      135deg,
+      #a9b5df,
+      #f4cce9
+    ); /* Gradient xanh đậm */
+    padding: 1rem;
+  }
+
+  .nav-link {
+    color: #ffffff !important;
+    transition: color 0.3s ease-in-out;
+  }
+
+  .nav-link:hover {
+    color: #7886c7 !important; /* Màu vàng khi hover */
+  }
+
+  .btn-outline-light {
+    border-color: #7886c7;
+    color: #7886c7;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .btn-outline-light:hover {
+    background-color: #7886c7;
+    color: #1e3c72;
+  }
+
+  .btn-warning {
+    background-color: #7886c7;
+    border-color: #7886c7;
+    color: #1e3c72;
+  }
+
+  .btn-warning:hover {
+    background-color: #7886c7; /* Vàng đậm hơn */
+  }
+
+  .btn-danger {
+    background-color: #7886c7;
+    border-color: #7886c7;
+  }
+
+  .btn-danger:hover {
+    background-color: #7886c7;
+  }
+
+  .text-white {
+    font-weight: bold;
+  }
+</style>

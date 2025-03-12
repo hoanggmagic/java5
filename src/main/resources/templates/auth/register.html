@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Ký - Website Bán Hàng</title>
+
+    <!-- Thêm Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .register-container {
+        max-width: 450px;
+        margin: 50px auto;
+        padding: 30px;
+        border-radius: 10px;
+        background: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-label {
+        font-weight: bold;
+      }
+
+      .form-control {
+        border-radius: 6px;
+      }
+
+      .btn-register {
+        width: 100%;
+        font-weight: bold;
+        background-color: #a9b5df;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        color: white;
+        transition: 0.3s;
+      }
+
+      .btn-register:hover {
+        background-color: #a9b5df;
+      }
+
+      .login-link {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Nhúng phần header -->
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <main>
+      <div class="register-container">
+        <h2 class="text-center">Đăng Ký</h2>
+
+        <!-- Hiển thị thông báo lỗi -->
+        <div th:if="${message}" class="alert alert-danger text-center">
+          <span th:text="${message}"></span>
+        </div>
+
+        <form
+          th:action="@{/auth/register}"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="mb-3">
+            <label for="username" class="form-label">Tên đăng nhập:</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Mật khẩu:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="fullname" class="form-label">Họ và tên:</label>
+            <input
+              type="text"
+              id="fullname"
+              name="fullname"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="photo" class="form-label">Chọn ảnh đại diện:</label>
+            <input
+              type="file"
+              id="photo"
+              name="photo"
+              class="form-control"
+              accept="image/png, image/jpeg, image/jpg"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-register">Đăng Ký</button>
+        </form>
+
+        <p class="login-link">
+          Đã có tài khoản? <a href="/auth/login">Đăng nhập</a>
+        </p>
+      </div>
+    </main>
+
+    <!-- Nhúng phần footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <!-- Thêm Bootstrap JS -->
+    <script
+      th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"
+    ></script>
+  </body>
+</html>

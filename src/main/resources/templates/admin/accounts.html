@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Tài Khoản</title>
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+  </head>
+  <body>
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-4">
+      <h2 class="text-center">Quản lý Tài Khoản</h2>
+
+      <!-- Form thêm tài khoản -->
+      <div class="card p-3 mb-4">
+        <h5>Thêm tài khoản mới</h5>
+        <form th:action="@{/admin/accounts/add}" method="post">
+          <div class="row">
+            <div class="col-md-4">
+              <label>Tên đăng nhập:</label>
+              <input
+                type="text"
+                name="username"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label>Email:</label>
+              <input type="email" name="email" class="form-control" required />
+            </div>
+            <div class="col-md-4">
+              <label>Họ và tên:</label>
+              <input
+                type="text"
+                name="fullname"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-4">
+              <label>Mật khẩu:</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label>Trạng thái:</label>
+              <select name="activated" class="form-control">
+                <option value="true">Đã kích hoạt</option>
+                <option value="false">Chưa kích hoạt</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label>Admin:</label>
+              <select name="admin" class="form-control">
+                <option value="false">Không</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3">Thêm</button>
+        </form>
+      </div>
+
+      <!-- Bảng danh sách tài khoản -->
+      <table class="table table-bordered mt-3">
+        <thead class="table-dark">
+          <tr>
+            <th>Tên đăng nhập</th>
+            <th>Email</th>
+            <th>Họ và tên</th>
+            <th>Mật khẩu</th>
+            <th>Trạng thái</th>
+            <th>Admin</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="account : ${accounts}">
+            <td th:text="${account.username}"></td>
+            <td th:text="${account.email}"></td>
+            <td th:text="${account.fullname}"></td>
+            <td>******</td>
+            <!-- Ẩn mật khẩu -->
+            <td
+              th:text="${account.activated ? 'Đã kích hoạt' : 'Chưa kích hoạt'}"
+            ></td>
+            <td th:text="${account.admin ? 'Có' : 'Không'}"></td>
+            <td>
+              <a
+                th:href="@{'/admin/accounts/edit/' + ${account.username}}"
+                class="btn btn-warning btn-sm"
+                >Sửa</a
+              >
+              <a
+                th:href="@{'/admin/accounts/delete/' + ${account.username}}"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Bạn có chắc chắn muốn xóa?');"
+                >Xóa</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div th:replace="~{layouts/footer.html}"></div>
+  </body>
+</html>

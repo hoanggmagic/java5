@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Trị - Website Bán Hàng</title>
+
+    <!-- Thêm Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+
+    <style>
+      .admin-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        margin-bottom: 20px;
+        background-color: #f8f9fa;
+      }
+      .admin-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #a9b5df;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .admin-btn:hover {
+        background-color: #a9b5df;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Nhúng phần header -->
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-4">
+      <h2 class="text-center">Trang Quản Trị</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="admin-card">
+            <h3>Quản lý sản p hẩm</h3>
+            <p>Thêm, sửa, xóa sản phẩm.</p>
+            <a href="/admin/products" class="admin-btn">Quản lý</a>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="admin-card">
+            <h3>Quản lý danh mục</h3>
+            <p>Xem danh sách đơn hàng.</p>
+            <a href="/admin/category" class="admin-btn">Quản lý</a>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="admin-card">
+            <h3>Quản lý tài khoản</h3>
+            <p>Quản lý tài khoản người dùng.</p>
+            <a href="/admin/accounts" class="admin-btn">Quản lý</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nhúng phần footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <!-- Thêm Bootstrap JS -->
+    <script
+      th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liên Hệ</title>
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+    <style>
+      .contact-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh; /* Đảm bảo căn giữa theo chiều dọc */
+      }
+      h1 {
+        margin-bottom: 15px;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .success-message {
+        color: green;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nhúng phần header -->
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="contact-container">
+      <h1>Liên Hệ Với Chúng Tôi</h1>
+      <p>
+        Chúng tôi rất vui khi nhận được thông tin từ bạn. Vui lòng điền vào form
+        dưới đây và chúng tôi sẽ trả lời bạn trong thời gian sớm nhất.
+      </p>
+
+      <!-- Form liên hệ -->
+      <form action="/contact" method="POST">
+        <label for="name">Tên của bạn:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email của bạn:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="message">Tin nhắn của bạn:</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Gửi</button>
+      </form>
+
+      <!-- Hiển thị thông báo thành công -->
+      <div th:if="${successMessage != null}" class="success-message">
+        <p th:text="${successMessage}"></p>
+      </div>
+    </div>
+
+    <!-- Nhúng phần footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+  </body>
+</html>

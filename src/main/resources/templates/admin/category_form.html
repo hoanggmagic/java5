@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chỉnh Sửa Danh Mục</title>
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+  </head>
+  <body>
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-4">
+      <h2 class="text-center mb-4">Chỉnh Sửa Danh Mục</h2>
+
+      <!-- Form chỉnh sửa danh mục -->
+      <div class="card p-3 mb-4">
+        <h5>Chỉnh sửa thông tin danh mục</h5>
+        <form th:action="@{/admin/category/saveOrUpdate}" method="post">
+          <input type="hidden" th:value="${category.id}" name="id" />
+
+          <div class="mb-3">
+            <label for="name" class="form-label">Tên Danh Mục:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-control"
+              placeholder="Nhập tên danh mục"
+              th:value="${category.name}"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-success">
+            Cập Nhật Danh Mục
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <script
+      th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"
+    ></script>
+  </body>
+</html>

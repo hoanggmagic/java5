@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh Sách Danh Mục</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+      }
+      .form-control {
+        font-family: "Roboto", sans-serif; /* Đảm bảo các trường nhập liệu cũng sử dụng font này */
+      }
+      h2,
+      h5 {
+        font-family: "Roboto", sans-serif; /* Đảm bảo tiêu đề cũng sử dụng font này */
+      }
+      table th,
+      table td {
+        text-align: center; /* Căn giữa nội dung bảng */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-4">
+      <h2 class="text-center mb-4">Danh Sách Danh Mục</h2>
+
+      <!-- Form thêm danh mục -->
+      <div class="card p-3 mb-4">
+        <h5>Thêm danh mục mới</h5>
+        <form th:action="@{/admin/category/save}" method="post">
+          <div class="mb-3">
+            <label for="name" class="form-label">Tên Danh Mục:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-control"
+              placeholder="Nhập tên danh mục"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Thêm Danh Mục</button>
+        </form>
+      </div>
+
+      <!-- Bảng danh sách danh mục -->
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Tên Danh Mục</th>
+            <th>Hành Động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Lặp qua các danh mục -->
+          <tr th:each="category : ${categories}">
+            <td th:text="${category.id}"></td>
+            <td th:text="${category.name}"></td>
+            <td>
+              <!-- Liên kết đến trang chỉnh sửa -->
+              <a
+                th:href="@{/admin/category/edit/{id}(id=${category.id})}"
+                class="btn btn-warning btn-sm"
+                >Chỉnh sửa</a
+              >
+              <!-- Liên kết đến trang xóa -->
+              <a
+                th:href="@{/admin/category/delete/{id}(id=${category.id})}"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
+                >Xóa</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

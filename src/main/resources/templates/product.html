@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Chủ - Website Bán Hàng</title>
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+  </head>
+
+  <body>
+    <!-- Nhúng phần header -->
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-5">
+      <h1 class="text-center mb-4">Danh Sách Sản Phẩm</h1>
+
+      <div class="row">
+        <!-- Lặp qua danh sách sản phẩm từ Controller -->
+        <div
+          class="col-lg-3 col-md-4 col-sm-6 mb-4"
+          th:each="product : ${products}"
+        >
+          <div class="card shadow-sm h-100">
+            <!-- Hiển thị ảnh sản phẩm hoặc ảnh mặc định -->
+            <img
+              th:src="${product.imageUrl != null ? product.imageUrl : '/images/default.jpg'}"
+              class="card-img-top"
+              alt="Sản phẩm"
+            />
+            <div class="card-body text-center d-flex flex-column">
+              <h5 class="card-title" th:text="${product.name}">Tên sản phẩm</h5>
+
+              <!-- Giới hạn mô tả sản phẩm -->
+              <p class="card-text text-muted small">
+                <span
+                  th:if="${#strings.length(product.description) > 50}"
+                  th:text="${#strings.substring(product.description, 0, 50) + '...'}"
+                >
+                </span>
+                <span
+                  th:unless="${#strings.length(product.description) > 50}"
+                  th:text="${product.description}"
+                >
+                </span>
+              </p>
+
+              <p class="text-danger fw-bold">
+                <span
+                  th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', '.')}"
+                >
+                </span>
+                VND
+              </p>
+
+              <a
+                th:href="@{/cart/add/{id}(id=${product.id})}"
+                class="btn btn-primary mt-auto"
+              >
+                Thêm vào giỏ
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nhúng phần footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <script
+      th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"
+    ></script>
+  </body>
+</html>

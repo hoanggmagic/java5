@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giỏ Hàng</title>
+
+    <!-- Chèn link CSS -->
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <!-- Nhúng Header -->
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-4">
+      <h1 class="text-center">Giỏ Hàng</h1>
+
+      <!-- Bảng danh sách sản phẩm -->
+      <div class="table-responsive">
+        <table id="cartTable" class="table table-striped">
+          <thead>
+            <tr>
+              <th>Sản phẩm</th>
+              <th>Số lượng</th>
+              <th>Giá</th>
+              <th>Tổng</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="cartBody">
+            <!-- Dữ liệu giỏ hàng sẽ được hiển thị tại đây -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Hiển thị tổng tiền -->
+      <div class="text-end mt-3">
+        <h3>Tổng tiền: <span id="totalPrice">0</span> VND</h3>
+      </div>
+
+      <!-- Nút thanh toán -->
+      <div class="text-center mt-3">
+        <button id="checkoutBtn" class="btn btn-primary">Thanh toán</button>
+      </div>
+    </div>
+
+    <!-- Modal xác nhận thanh toán -->
+    <div
+      class="modal fade"
+      id="checkoutModal"
+      tabindex="-1"
+      aria-labelledby="checkoutModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="checkoutModalLabel">
+              Xác nhận thanh toán
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="checkoutForm">
+              <div class="mb-3">
+                <label for="recipientName" class="form-label"
+                  >Họ và tên người nhận</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="recipientName"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="recipientAddress" class="form-label"
+                  >Địa chỉ nhận hàng</label
+                >
+                <textarea
+                  class="form-control"
+                  id="recipientAddress"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="recipientPhone" class="form-label"
+                  >Số điện thoại</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="recipientPhone"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Hủy
+            </button>
+            <button
+              type="button"
+              id="confirmCheckoutBtn"
+              class="btn btn-primary"
+            >
+              Xác nhận
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nhúng Footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <style>
+      .table {
+        background-color: white;
+      }
+      .table th {
+        background-color: #a9b5df;
+        color: white;
+      }
+      .table td {
+        color: #333;
+      }
+      #totalPrice {
+        color: black;
+      }
+      #checkoutBtn {
+        background-color: #a9b5df;
+        color: white;
+      }
+      #checkoutBtn:hover {
+        background-color: #889ac5;
+      }
+      .modal-content {
+        background-color: #f8f9fa;
+      }
+    </style>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript xử lý giỏ hàng -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let cartBody = document.getElementById("cartBody");
+        let totalPriceElement = document.getElementById("totalPrice");
+        let checkoutBtn = document.getElementById("checkoutBtn");
+
+        function renderCart() {
+          cartBody.innerHTML = "";
+          let total = 0;
+
+          cart.forEach((item, index) => {
+            let row = document.createElement("tr");
+            let totalItemPrice = item.quantity * item.price;
+            total += totalItemPrice;
+
+            row.innerHTML = `
+              <td>${item.name}</td>
+              <td><input type="number" value="${
+                item.quantity
+              }" min="1" class="form-control update-quantity" data-index="${index}"></td>
+              <td>${item.price.toLocaleString()} VND</td>
+              <td>${totalItemPrice.toLocaleString()} VND</td>
+              <td><button class="btn btn-danger btn-sm remove-item" data-index="${index}">Xóa</button></td>
+            `;
+            cartBody.appendChild(row);
+          });
+
+          totalPriceElement.textContent = total.toLocaleString();
+        }
+
+        // Xử lý thay đổi số lượng
+        cartBody.addEventListener("input", function (event) {
+          if (event.target.classList.contains("update-quantity")) {
+            let index = event.target.getAttribute("data-index");
+            let newQuantity = parseInt(event.target.value);
+            if (newQuantity > 0) {
+              cart[index].quantity = newQuantity;
+              localStorage.setItem("cart", JSON.stringify(cart));
+              renderCart();
+            }
+          }
+        });
+
+        // Xóa sản phẩm khỏi giỏ hàng
+        cartBody.addEventListener("click", function (event) {
+          if (event.target.classList.contains("remove-item")) {
+            let index = event.target.getAttribute("data-index");
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            renderCart();
+          }
+        });
+
+        // Xử lý nút thanh toán
+        checkoutBtn.addEventListener("click", function () {
+          if (cart.length === 0) {
+            alert("Giỏ hàng của bạn đang trống!");
+            return;
+          }
+
+          // Hiển thị modal để yêu cầu địa chỉ nhận hàng
+          let checkoutModal = new bootstrap.Modal(
+            document.getElementById("checkoutModal")
+          );
+          checkoutModal.show();
+        });
+
+        // Xử lý xác nhận thanh toán trong modal
+        document
+          .getElementById("confirmCheckoutBtn")
+          .addEventListener("click", function () {
+            let recipientName = document.getElementById("recipientName").value;
+            let recipientAddress =
+              document.getElementById("recipientAddress").value;
+            let recipientPhone =
+              document.getElementById("recipientPhone").value;
+
+            if (recipientName && recipientAddress && recipientPhone) {
+              // Lưu thông tin và tiến hành thanh toán
+              alert(
+                "Thanh toán thành công! Đơn hàng của bạn sẽ được giao đến: " +
+                  recipientAddress
+              );
+
+              // Xóa giỏ hàng sau khi thanh toán
+              localStorage.removeItem("cart");
+
+              // Đóng modal và làm mới trang
+              let checkoutModal = bootstrap.Modal.getInstance(
+                document.getElementById("checkoutModal")
+              );
+              checkoutModal.hide();
+              window.location.reload();
+            } else {
+              alert("Vui lòng nhập đầy đủ thông tin nhận hàng!");
+            }
+          });
+
+        renderCart();
+      });
+    </script>
+  </body>
+</html>

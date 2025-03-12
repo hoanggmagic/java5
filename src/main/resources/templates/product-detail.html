@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi Tiết Sản Phẩm</title>
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+  </head>
+
+  <body>
+    <!-- Nhúng phần header -->
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Hiển thị ảnh sản phẩm -->
+          <img
+            th:src="${product.imageUrl != null ? product.imageUrl : '/images/default.jpg'}"
+            class="card-img-top"
+            alt="Sản phẩm"
+          />
+        </div>
+        <div class="col-md-6">
+          <h1 th:text="${product.name}">Tên sản phẩm</h1>
+          <p class="text-muted" th:text="${product.description}">
+            Mô tả sản phẩm
+          </p>
+          <p
+            class="text-danger fw-bold"
+            th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', '.')}"
+          ></p>
+          <p class="fw-bold">VND</p>
+
+          <!-- Thêm vào giỏ hàng -->
+          <a
+            th:href="@{/cart/add/{id}(id=${product.id})}"
+            class="btn btn-primary"
+          >
+            Thêm vào giỏ hàng
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nhúng phần footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <script
+      th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"
+    ></script>
+  </body>
+</html>

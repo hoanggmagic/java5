@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Chủ - Website Bán Hàng</title>
+
+    <!-- Thêm Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+
+    <!-- Thêm CSS tùy chỉnh nếu cần -->
+    <style>
+      .card {
+        background-color: #f8f9fa; /* Màu nền nhạt */
+        border-color: #dee2e6;
+      }
+
+      .card-title {
+        color: #343a40; /* Màu chữ đậm */
+      }
+
+      .card-text {
+        color: #dc3545; /* Màu đỏ cho giá sản phẩm */
+      }
+
+      .btn-primary {
+        background-color: #a9b5df; /* Màu xanh dương */
+        border-color: #a9b5df;
+      }
+
+      .btn-primary:hover {
+        background-color: #a9b5df;
+        border-color: #a9b5df;
+      }
+
+      .btn-success {
+        background-color: #f4cce9; /* Màu xanh lá */
+        border-color: #f4cce9;
+      }
+
+      .btn-success:hover {
+        background-color: #f4cce9;
+        border-color: #f4cce9;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Nhúng phần header -->
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-md-4 mb-4" th:each="product : ${products}">
+          <div class="card shadow-sm">
+            <img
+              th:if="${product.imageUrl != null}"
+              th:src="@{${product.imageUrl}}"
+              class="card-img-top product-image"
+              alt="Ảnh sản phẩm"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title fw-bold" th:text="${product.name}">
+                Tên sản phẩm
+              </h5>
+              <p
+                class="card-text text-danger fw-bold"
+                th:text="'₫' + ${product.price}"
+              >
+                Giá sản phẩm
+              </p>
+              <div class="d-flex justify-content-center gap-2">
+                <a
+                  th:href="@{/products/{id}(id=${product.id})}"
+                  class="btn btn-primary"
+                  >Xem chi tiết</a
+                >
+                <button
+                  class="btn btn-success add-to-cart"
+                  th:data-id="${product.id}"
+                  th:data-name="${product.name}"
+                  th:data-price="${product.price}"
+                  th:data-image="${product.imageUrl}"
+                >
+                  Thêm vào giỏ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nhúng phần footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <!-- Thêm Bootstrap JS -->
+    <script
+      th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"
+    ></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Lấy tất cả các nút "Thêm vào giỏ"
+        const addToCartButtons = document.querySelectorAll(".add-to-cart");
+
+        // Lắng nghe sự kiện click vào từng nút
+        addToCartButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // Lấy thông tin sản phẩm từ thuộc tính data-* của nút
+            const productId = this.getAttribute("data-id");
+            const productName = this.getAttribute("data-name");
+            const productPrice = this.getAttribute("data-price");
+            const productImage = this.getAttribute("data-image");
+
+            // Lấy giỏ hàng từ localStorage (nếu có) hoặc khởi tạo giỏ mới
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            // Kiểm tra nếu sản phẩm đã có trong giỏ hàng, nếu có thì tăng số lượng
+            const existingProduct = cart.find((item) => item.id === productId);
+            if (existingProduct) {
+              existingProduct.quantity += 1; // Tăng số lượng sản phẩm
+            } else {
+              // Nếu chưa có, thêm sản phẩm mới vào giỏ
+              cart.push({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                imageUrl: productImage,
+                quantity: 1,
+              });
+            }
+
+            // Lưu giỏ hàng vào localStorage
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            // Thông báo cho người dùng
+            alert("Sản phẩm đã được thêm vào giỏ hàng!");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

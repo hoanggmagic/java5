@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh sách sản phẩm</title>
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}"
+    />
+  </head>
+  <body>
+    <!-- Nhúng phần header -->
+    <div th:replace="~{layouts/header.html}"></div>
+
+    <div class="container mt-5">
+      <h1 class="text-center mb-4">Danh sách sản phẩm</h1>
+
+      <div class="row">
+        <div class="col-md-4 mb-4" th:each="product : ${products}">
+          <div class="card shadow-sm">
+            <img
+              th:if="${product.imageUrl != null}"
+              th:src="@{${product.imageUrl}}"
+              class="card-img-top product-image"
+              alt="Ảnh sản phẩm"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title fw-bold" th:text="${product.name}">
+                Tên sản phẩm
+              </h5>
+              <p
+                class="card-text text-danger fw-bold"
+                th:text="'₫' + ${product.price}"
+              >
+                Giá sản phẩm
+              </p>
+              <div class="d-flex justify-content-center gap-2">
+                <a
+                  th:href="@{/products/{id}(id=${product.id})}"
+                  class="btn btn-primary"
+                  >Xem chi tiết</a
+                >
+                <button
+                  class="btn btn-success add-to-cart"
+                  th:data-id="${product.id}"
+                  th:data-name="${product.name}"
+                  th:data-price="${product.price}"
+                  th:data-image="${product.imageUrl}"
+                >
+                  Thêm vào giỏ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nhúng phần footer -->
+    <div th:replace="~{layouts/footer.html}"></div>
+
+    <script
+      th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"
+    ></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        function saveCart() {
+          localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+        function addToCart(product) {
+          const existingItem = cart.find((item) => item.id === product.id);
+          if (existingItem) {
+            existingItem.quantity++;
+          } else {
+            cart.push({ ...product, quantity: 1 });
+          }
+          saveCart();
+          alert("Đã thêm vào giỏ hàng!");
+        }
+
+        document.querySelectorAll(".add-to-cart").forEach((button) => {
+          button.addEventListener("click", function () {
+            const product = {
+              id: this.getAttribute("data-id"),
+              name: this.getAttribute("data-name"),
+              price: this.getAttribute("data-price"),
+              image: this.getAttribute("data-image"),
+            };
+            addToCart(product);
+          });
+        });
+      });
+    </script>
+
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .container h1 {
+        color: #343a40;
+      }
+
+      .card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .card:hover {
+        transform: scale(1.05);
+      }
+
+      .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 2px solid #dee2e6;
+      }
+
+      .card-title {
+        color: #212529;
+      }
+
+      .card-text {
+        color: #dc3545;
+        font-size: 18px;
+      }
+
+      .btn-primary {
+        background-color: #a9b5df;
+        border-color: #a9b5df;
+      }
+
+      .btn-primary:hover {
+        background-color: #a9b5df;
+        border-color: #a9b5df;
+      }
+
+      .btn-success {
+        background-color: #f4cce9;
+        border-color: #f4cce9;
+      }
+
+      .btn-success:hover {
+        background-color: #f4cce9;
+        border-color: #f4cce9;
+      }
+    </style>
+  </body>
+</html>
