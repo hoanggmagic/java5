@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Ký</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+      }
+      .register-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="register-container">
+      <h2>Đăng Ký</h2>
+      <input type="text" id="newUsername" placeholder="Tên đăng nhập" />
+      <input type="password" id="newPassword" placeholder="Mật khẩu" />
+      <input
+        type="password"
+        id="confirmPassword"
+        placeholder="Xác nhận mật khẩu"
+      />
+      <button onclick="register()">Đăng Ký</button>
+      <p id="registerMessage" style="color: red"></p>
+    </div>
+
+    <script>
+      function register() {
+        var username = document.getElementById("newUsername").value;
+        var password = document.getElementById("newPassword").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+        var message = document.getElementById("registerMessage");
+
+        if (username === "" || password === "" || confirmPassword === "") {
+          message.textContent = "Vui lòng điền đầy đủ thông tin!";
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          message.textContent = "Mật khẩu xác nhận không khớp!";
+          return;
+        }
+
+        alert("Đăng ký thành công!");
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>
